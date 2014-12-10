@@ -33,11 +33,15 @@ class ResponseCollection implements \Iterator, \Countable, \ArrayAccess
 
     /**
      * @param  CommandInterface $cmd
-     * @return FilterIterator
+     * @return ResponseCollection
      */
     public function getCommandResult(CommandInterface $cmd)
     {
-        return new ResponseFilterIterator($this, $cmd);
+        $collection = new static();
+        foreach (new ResponseFilterIterator($this, $cmd) as $response) {
+            $collection->add($response);
+        }
+        return $collection;
     }
 
     /**
